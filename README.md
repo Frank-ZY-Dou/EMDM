@@ -18,6 +18,107 @@ We introduce Efficient Motion Diffusion Model (EMDM) for fast and high-quality h
 }
 ```
 
+# Set up environment
+Note that the order of the package installation matters.
+
+```bash
+conda create -n emdm python=3.10.13
+conda activate emdm
+pip3 install torch
+pip install "git+https://github.com/openai/CLIP.git"
+pip install scipy einops spacy chumpy wandb smplx pandas scikit-learn chardet
+pip install matplotlib==3.1.3 --upgrade
+pip install numpy==1.23.5 --upgrade
+```
+
+
+# Additional files needed
+
+Follow instructions in [MDM](https://github.com/GuyTevet/motion-diffusion-model?tab=readme-ov-file) (Getting started - Setup environment) to obtain the following files: (No need to execute the environment-related commands)
+
+- ./dataset/HumanML3D, KIT-ML, HumanAct12Poses
+- ./glove
+- ./body_models
+- ./assets/actionrecognition
+- ./t2m
+- ./kit
+
+
+# Example commands for training
+## Training t2m
+```bash
+CUDA_VISIBLE_DEVICES=0 python train_ddgan.py --dataset {humanml, kit} --exp <experiment name> --lambda_rot_mse 100 --save_dir <directory for saved models>
+```
+
+if want to resume from training, add:
+```bash
+--resume --content_path <path to the content file>
+```
 
 
 
+## Training a2m
+```bash
+CUDA_VISIBLE_DEVICES=0 python train_ddgan.py --dataset humanact12 --exp <experiment name> --lambda_rcxyz 1 --lambda_vel 1 --lambda_fc 1 --lambda_rot_mse 1 --save_dir<directory for saved models>
+```
+
+
+## Optional additional keywords examples
+
+**general kwargs**: `--num_timesteps 10 --batch_size 64 --nz 64 --n_mlp 4 --embedding_type positional --use_ema --ema_decay 0.9999 --r1_gamma 0.02 --lr_d 1.25e-4 --lr_g 1e-5 --lazy_reg 15 --transformer_activation selu  --d_type mlp --separate_t_and_action ` 
+
+**model-related kwargs**: `--num_heads 32 --layers 12 --latent_dim 1024`
+
+**save kwargs**: `--save_content_every 60 --save_ckpt_every 10 --log_time_every_x_step 100`
+
+# Command for sampling
+## t2m sampling
+```
+python sample_mdm.py [general kwargs] [model specific kwargs] \
+[--input_text ./assets/example_text_prompts.txt] \
+--guidance_param 2.5 \
+--model_path <path_to_model> \
+--dataset {humanml, kit}
+```
+
+
+## a2m sampling
+Similar to t2m:
+
+```
+python sample_mdm.py
+[general kwargs] [model specific kwargs] \
+[--action_file ./assets/example_action_names_humanact12.txt] \
+--model_path <path_to_model>
+```
+
+
+# Evaluation
+## t2m evaluation
+
+To evaluate a single model:
+```bash
+CUDA_VISIBLE_DEVICES=0 python eval_humanml.py \
+--model_path <model_path> \
+--eval_mode {fast, wo_mm, mm_short, full} --dataset humanml
+```
+
+To evaluate multiple models in the same folder:
+```bash
+CUDA_VISIBLE_DEVICES=0 python eval_humanml.py \
+--block --start 2260 --end 2280 --interval 10 --model_path <model_folder_path> \
+--eval_mode {fast, wo_mm, mm_short, full} --dataset humanml
+```
+for example, this would evaluate model at epochs 2260, 2270, 2280
+
+
+## a2m evaluation
+```bash
+CUDA_VISIBLE_DEVICES=1 python eval_humanact12_uestc.py --dataset humanact12 --cond_mask_prob 0 --eval_mode full --guidance_param 1 --model_path <model path>
+```
+
+
+## License
+This code is distributed under an [MIT LICENSE](LICENSE).
+
+Note that our code depends on other libraries, including CLIP, SMPL, SMPL-X, PyTorch3D, and uses datasets that each have their own respective licenses that must also be followed.
