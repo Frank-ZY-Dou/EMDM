@@ -1,5 +1,5 @@
 # Introduction
-Official code for the paper **[EMDM: Efficient Motion Diffusion Model for Fast, High-Quality Motion Generation](https://arxiv.org/abs/2312.02256), Arxiv 2023**.
+Official code for the paper **[EMDM: Efficient Motion Diffusion Model for Fast, High-Quality Motion Generation](https://arxiv.org/abs/2312.02256), ECCV 2024**.
 
 
 [[Project Page](https://frank-zy-dou.github.io/projects/EMDM/index.html)][[Paper](https://arxiv.org/abs/2312.02256)][[Video](https://www.youtube.com/watch?si=atUuUP4eLbXQjixc&v=1SyCXbnol_g&feature=youtu.be&ab_channel=FrankZhiyangDou)]
