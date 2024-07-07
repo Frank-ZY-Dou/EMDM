@@ -1,0 +1,12 @@
+warm_up
+walk
+run
+jump
+drink
+lift_dumbbell
+sit
+eat
+turn steering wheel
+phone
+boxing
+throw
