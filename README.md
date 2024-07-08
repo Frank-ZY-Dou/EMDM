@@ -43,6 +43,8 @@ Follow instructions in [MDM](https://github.com/GuyTevet/motion-diffusion-model?
 - ./t2m
 - ./kit
 
+To download models, see [Google Drive link](https://drive.google.com/drive/folders/1SWsFsHYE4dsXxsX68N1nRYfS4d2PsedZ?usp=sharing) and download the corresponding models.
+
 
 # Example commands for training
 ## Training t2m
